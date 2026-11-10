@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ಇಂಗ್ಲಿಷ್ ಕಲಿ — English Kali</title>
+<meta name="description" content="ಕನ್ನಡದಲ್ಲಿ ಸುಲಭವಾಗಿ English ಕಲಿಯಿರಿ — ಪಾಠಗಳು, English ⇄ ಕನ್ನಡ ಅನುವಾದ ಮತ್ತು ಧ್ವನಿ ಮಾತುಕತೆ.">
+<meta name="theme-color" content="#5B21B6">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;600;700;800&family=Noto+Sans:wght@400;600;700;800&family=Noto+Serif+Kannada:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  :root{ --vio:#6D28D9; --vio2:#4F46E5; --amber:#F59E0B; --ink:#1E1B2E; --mut:#6B6580; --bg:#F6F4FF; --card:#fff; }
+  html,body{ height:100%; }
+  body{ font-family:"Noto Sans Kannada","Noto Sans",system-ui,sans-serif; background:var(--bg); color:var(--ink); display:flex; flex-direction:column; }
+  header{ background:linear-gradient(135deg,var(--vio),var(--vio2)); color:#fff; padding:22px 18px 16px; padding-top:calc(22px + env(safe-area-inset-top)); box-shadow:0 2px 14px rgba(80,40,180,.28); }
+  header h1{ font-size:24px; font-weight:800; letter-spacing:.2px; }
+  header p{ font-size:13px; opacity:.88; margin-top:2px; }
+  main{ flex:1; overflow-y:auto; padding:14px 14px 18px; }
+  .view{ display:none; max-width:640px; margin:0 auto; }
+  .view.on{ display:block; }
+  /* lessons */
+  .catTitle{ font-size:17px; font-weight:800; margin:18px 2px 9px; color:var(--vio); }
+  .catTitle:first-child{ margin-top:2px; }
+  .lesson{ background:var(--card); border-radius:14px; padding:12px 14px; margin-bottom:9px; display:flex; align-items:center; gap:12px; box-shadow:0 1px 5px rgba(60,30,140,.07); }
+  .lesson .txt{ flex:1; min-width:0; }
+  .lesson .en{ font-family:"Noto Sans",sans-serif; font-size:17px; font-weight:700; }
+  .lesson .kn{ font-size:14.5px; color:var(--ink); margin-top:2px; }
+  .lesson .pr{ font-size:13px; color:var(--mut); margin-top:1px; }
+  .spk{ flex:none; width:44px; height:44px; border:none; border-radius:50%; background:#EFE9FF; font-size:20px; cursor:pointer; }
+  .spk:active{ transform:scale(.93); }
+  /* translator */
+  .dirRow{ display:flex; gap:8px; margin-bottom:12px; }
+  .dirBtn{ flex:1; padding:11px 6px; border-radius:12px; border:2px solid #DDD3FA; background:#fff; font-family:inherit; font-size:15px; font-weight:700; color:var(--mut); cursor:pointer; }
+  .dirBtn.on{ background:var(--vio); border-color:var(--vio); color:#fff; }
+  textarea{ width:100%; min-height:110px; border:2px solid #DDD3FA; border-radius:14px; padding:12px; font-family:inherit; font-size:16.5px; resize:vertical; background:#fff; color:var(--ink); }
+  textarea:focus{ outline:none; border-color:var(--vio); }
+  .btnRow{ display:flex; gap:8px; margin:12px 0; }
+  .bigBtn{ flex:1; padding:14px; border:none; border-radius:14px; background:linear-gradient(135deg,var(--vio),var(--vio2)); color:#fff; font-family:inherit; font-size:16.5px; font-weight:800; cursor:pointer; box-shadow:0 3px 10px rgba(90,40,200,.3); }
+  .bigBtn:disabled{ opacity:.55; }
+  .micBtn{ width:56px; border:none; border-radius:14px; background:#FFF3D6; font-size:23px; cursor:pointer; }
+  .micBtn.rec{ background:#FEE2E2; animation:pulse 1s infinite; }
+  @keyframes pulse{ 50%{ transform:scale(1.07); } }
+  .outBox{ background:#fff; border:2px dashed #C9B8F5; border-radius:14px; padding:14px; min-height:82px; font-size:17px; line-height:1.55; white-space:pre-wrap; word-break:break-word; }
+  .outBtns{ display:flex; gap:8px; margin-top:10px; }
+  .miniBtn{ flex:1; padding:11px; border-radius:12px; border:2px solid #DDD3FA; background:#fff; font-family:inherit; font-size:14.5px; font-weight:700; cursor:pointer; color:var(--vio); }
+  .note{ font-size:13px; color:var(--mut); text-align:center; margin-top:10px; }
+  /* chat */
+  .chatBox{ display:flex; flex-direction:column; gap:10px; padding-bottom:8px; }
+  .bub{ max-width:88%; padding:11px 13px; border-radius:16px; font-size:15.5px; line-height:1.55; white-space:pre-wrap; word-break:break-word; }
+  .bub.me{ align-self:flex-end; background:var(--vio); color:#fff; border-bottom-right-radius:5px; }
+  .bub.ai{ align-self:flex-start; background:#fff; border-bottom-left-radius:5px; box-shadow:0 1px 5px rgba(60,30,140,.09); }
+  .bub .enT{ font-family:"Noto Sans",sans-serif; font-weight:700; font-size:16.5px; display:block; }
+  .bub .knT{ display:block; margin-top:4px; color:#45405C; }
+  .bub .spkS{ margin-top:7px; border:none; background:#EFE9FF; border-radius:999px; padding:5px 13px; font-size:13.5px; cursor:pointer; font-family:inherit; }
+  .chatCtl{ position:sticky; bottom:0; background:var(--bg); padding:10px 0 2px; }
+  .bigMic{ width:100%; padding:16px; border:none; border-radius:16px; background:linear-gradient(135deg,#D97706,var(--amber)); color:#fff; font-family:inherit; font-size:18px; font-weight:800; cursor:pointer; box-shadow:0 3px 12px rgba(220,140,10,.35); }
+  .bigMic.rec{ background:linear-gradient(135deg,#DC2626,#EF4444); animation:pulse 1s infinite; }
+  /* tabs */
+  nav{ display:flex; background:#fff; border-top:1px solid #E6E0F7; padding-bottom:env(safe-area-inset-bottom); }
+  nav button{ flex:1; border:none; background:none; padding:9px 2px 11px; font-family:inherit; font-size:13px; font-weight:700; color:var(--mut); cursor:pointer; }
+  nav button .ic{ display:block; font-size:22px; margin-bottom:1px; }
+  nav button.on{ color:var(--vio); }
+  /* opening welcome */
+  #splash{ position:fixed; inset:0; z-index:99; background:linear-gradient(160deg,var(--vio),var(--vio2)); color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:24px; }
+  #splash.hide{ display:none; }
+  .splashIcon{ width:110px; height:110px; border-radius:26px; box-shadow:0 8px 30px rgba(0,0,0,.3); margin-bottom:22px; }
+  .splashMsg{ font-size:31px; font-weight:800; line-height:1.4; margin-bottom:8px; }
+  .splashName{ font-size:16.5px; opacity:.88; margin-bottom:36px; }
+  #splashGo{ background:#fff; color:var(--vio); border:none; font-family:inherit; font-size:18.5px; font-weight:800; padding:14px 44px; border-radius:999px; cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,.25); }
+  .splashFoot{ margin-top:28px; font-size:13px; opacity:.75; }
+  /* quiz */
+  .lvlCard{ background:var(--card); border-radius:14px; padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; gap:12px; box-shadow:0 1px 5px rgba(60,30,140,.07); cursor:pointer; }
+  .lvlCard.lock{ opacity:.55; cursor:default; }
+  .lvlCard .lt{ flex:1; } .lvlCard .lt b{ font-size:16.5px; display:block; } .lvlCard .lt span{ font-size:13px; color:var(--mut); }
+  .lvlCard .st{ font-size:22px; }
+  .qTop{ display:flex; justify-content:space-between; font-weight:700; color:var(--vio); margin:4px 2px 10px; font-size:14.5px; }
+  .qCard{ background:#fff; border-radius:16px; padding:16px; box-shadow:0 1px 6px rgba(60,30,140,.09); }
+  .qTxt{ font-family:"Noto Sans",sans-serif; font-size:19px; font-weight:700; line-height:1.45; margin-bottom:10px; }
+  .qTxt.knq{ font-family:"Noto Sans Kannada",sans-serif; }
+  .optBtn{ display:block; width:100%; text-align:left; margin-top:9px; padding:13px 14px; border:2px solid #DDD3FA; border-radius:12px; background:#fff; font-family:inherit; font-size:16px; cursor:pointer; color:var(--ink); }
+  .optBtn.right{ background:#DCFCE7; border-color:#22C55E; }
+  .optBtn.wrong{ background:#FEE2E2; border-color:#EF4444; }
+  .qExpl{ margin-top:12px; background:#FFFBEB; border:1px solid #FDE68A; border-radius:10px; padding:10px 12px; font-size:14.5px; line-height:1.5; }
+  .qBig{ font-size:26px; font-weight:800; text-align:center; }
+  /* fonts vary: serif for headings & the poet's name */
+  .avi{ font-family:"Noto Serif Kannada",serif; font-weight:800; letter-spacing:.2px; }
+  header h1, .catTitle, .splashMsg, .qBig{ font-family:"Noto Serif Kannada",serif; }
+  .lvlCard .lt b{ font-family:"Noto Serif Kannada",serif; }
+  .qTxt.knq{ font-family:"Noto Serif Kannada",serif; }
+  /* user colour themes */
+  body[data-theme="green"]{ --vio:#059669; --vio2:#047857; }
+  body[data-theme="blue"]{ --vio:#2563EB; --vio2:#1E40AF; }
+  body[data-theme="rose"]{ --vio:#E11D48; --vio2:#9F1239; }
+  body[data-theme="orange"]{ --vio:#EA580C; --vio2:#C2410C; }
+  /* 3-dot menu */
+  header{ position:relative; }
+  #menuBtn{ position:absolute; right:12px; top:calc(16px + env(safe-area-inset-top)); width:42px; height:42px; border:none; border-radius:50%; background:rgba(255,255,255,.18); color:#fff; font-size:24px; line-height:1; cursor:pointer; }
+  .menuPanel{ position:absolute; right:12px; top:calc(64px + env(safe-area-inset-top)); width:238px; background:#fff; color:var(--ink); border-radius:14px; box-shadow:0 12px 36px rgba(30,10,80,.30); padding:8px; z-index:60; text-align:left; }
+  .menuPanel > button{ display:block; width:100%; text-align:left; padding:11px 12px; border:none; background:none; font-family:inherit; font-size:15.5px; font-weight:600; border-radius:9px; cursor:pointer; color:var(--ink); }
+  .menuPanel > button:active{ background:#F1EDFE; }
+  .menuLbl{ font-size:13px; color:var(--mut); font-weight:700; padding:9px 12px 2px; border-top:1px solid #EEE9FB; margin-top:4px; }
+  .themeRow{ display:flex; gap:9px; padding:8px 12px 10px; }
+  .tdot{ width:33px; height:33px; border-radius:50%; border:3px solid #fff; box-shadow:0 0 0 1.5px #CFC6EE; cursor:pointer; padding:0; }
+  .tdot.on{ box-shadow:0 0 0 3px var(--vio); }
+  /* first-time question */
+  .splashQ{ font-family:"Noto Serif Kannada",serif; font-size:20px; font-weight:700; margin-bottom:14px; }
+  .splashAns{ display:block; width:252px; max-width:82vw; margin:9px auto; padding:13px 10px; border-radius:999px; border:2px solid rgba(255,255,255,.85); background:rgba(255,255,255,.13); color:#fff; font-family:inherit; font-size:16.5px; font-weight:700; cursor:pointer; }
+  footer{ text-align:center; font-size:12.5px; color:var(--mut); padding:6px 0 2px; }
+</style>
+</head>
+<body>
+<div id="splash">
+  <img class="splashIcon" src="icon-512.png" alt="">
+  <div class="splashMsg">ಇಂಗ್ಲಿಷ್ ಕಲಿಯಲು ಸ್ವಾಗತ</div>
+  <div class="splashName">ಇಂಗ್ಲಿಷ್ ಕಲಿ 📚</div>
+  <div id="splashFirst" style="display:none">
+    <div class="splashQ">ನಿಮಗೆಷ್ಟು ಇಂಗ್ಲಿಷ್ ಗೊತ್ತು?</div>
+    <button class="splashAns" data-ans="0">ನನಗೆ ಗೊತ್ತಿಲ್ಲ</button>
+    <button class="splashAns" data-ans="1">ಸ್ವಲ್ಪ ಗೊತ್ತಿದೆ</button>
+    <button class="splashAns" data-ans="2">ನನಗೆ ಗೊತ್ತಿದೆ</button>
+  </div>
+  <button id="splashGo">ಶುರು ಮಾಡಿ ▶</button>
+  <div class="splashFoot">ಪ್ರೀತಿಯಿಂದ — <span class="avi">ಅವಿಜ್ಞಾನಿ</span></div>
+</div>
+<header>
+  <h1>ಇಂಗ್ಲಿಷ್ ಕಲಿ 📚</h1>
+  <p>ಕನ್ನಡದಲ್ಲಿ ಸುಲಭವಾಗಿ English ಕಲಿಯಿರಿ</p>
+  <button id="menuBtn" aria-label="ಮೆನು">⋮</button>
+  <div class="menuPanel" id="menuPanel" style="display:none">
+    <button data-go="learn">📚 ಪಾಠಗಳು</button>
+    <button data-go="trans">🌐 ಅನುವಾದ</button>
+    <button data-go="chat">🎤 ಮಾತುಕತೆ</button>
+    <button data-go="quiz">🏆 ಕ್ವಿಜ್</button>
+    <div class="menuLbl">🎨 ಆಪ್‌ನ ಬಣ್ಣ — ನಿಮಗೆ ಇಷ್ಟವಾದದ್ದು</div>
+    <div class="themeRow">
+      <button class="tdot" data-theme-set="violet" style="background:linear-gradient(135deg,#6D28D9,#4F46E5)" aria-label="ಮೋರ್ನಿ"></button>
+      <button class="tdot" data-theme-set="green" style="background:linear-gradient(135deg,#059669,#047857)" aria-label="ಹಸಿರು"></button>
+      <button class="tdot" data-theme-set="blue" style="background:linear-gradient(135deg,#2563EB,#1E40AF)" aria-label="ನೀಲಿ"></button>
+      <button class="tdot" data-theme-set="rose" style="background:linear-gradient(135deg,#E11D48,#9F1239)" aria-label="ಗುಲಾಬಿ"></button>
+      <button class="tdot" data-theme-set="orange" style="background:linear-gradient(135deg,#EA580C,#C2410C)" aria-label="ಕಿತ್ತಳೆ"></button>
+    </div>
+    <button data-go="about">ℹ️ ಕಿತಾಪತಿ ಮಾಡಿದವರು</button>
+  </div>
+</header>
+
+<main>
+  <!-- ಪಾಠಗಳು -->
+  <section class="view on" id="v-learn">
+    <div id="lessons"></div>
+    <footer>ಪ್ರೀತಿಯಿಂದ — <span class="avi">ಅವಿಜ್ಞಾನಿ</span></footer>
+  </section>
+
+  <!-- ಅನುವಾದ -->
+  <section class="view" id="v-trans">
+    <div class="dirRow">
+      <button class="dirBtn on" id="dirEnKn">English → ಕನ್ನಡ</button>
+      <button class="dirBtn" id="dirKnEn">ಕನ್ನಡ → English</button>
+    </div>
+    <textarea id="trIn" placeholder="ಇಲ್ಲಿ English ಬರೆಯಿರಿ…"></textarea>
+    <div class="btnRow">
+      <button class="micBtn" id="trMic" title="ಮಾತನಾಡಿ">🎤</button>
+      <button class="bigBtn" id="trGo">ಅನುವಾದಿಸಿ 🌐</button>
+    </div>
+    <div class="outBox" id="trOut">ಅನುವಾದ ಇಲ್ಲಿ ಕಾಣುತ್ತದೆ…</div>
+    <div class="outBtns">
+      <button class="miniBtn" id="trSpeak">🔊 ಓದಿ ಹೇಳಿ</button>
+      <button class="miniBtn" id="trCopy">📋 ಕಾಪಿ ಮಾಡಿ</button>
+    </div>
+    <p class="note" id="trNote"></p>
+    <footer>ಪ್ರೀತಿಯಿಂದ — <span class="avi">ಅವಿಜ್ಞಾನಿ</span></footer>
+  </section>
+
+  <!-- ಮಾತುಕತೆ -->
+  <section class="view" id="v-chat">
+    <div class="dirRow">
+      <button class="dirBtn on" id="micKn">🎤 ನಾನು ಕನ್ನಡದಲ್ಲಿ ಮಾತನಾಡುತ್ತೇನೆ</button>
+      <button class="dirBtn" id="micEn">🎤 English ನಲ್ಲಿ ಅಭ್ಯಾಸ</button>
+    </div>
+    <div class="chatBox" id="chatBox">
+      <div class="bub ai"><span class="enT">Hello! I am your English teacher. 👋</span><span class="knT">ಮೈಕ್ ಒತ್ತಿ ಕನ್ನಡದಲ್ಲಿ ಏನಾದರೂ ಹೇಳಿ — ಅದನ್ನು English ನಲ್ಲಿ ಹೇಗೆ ಹೇಳಬೇಕು ಎಂದು ನಾನು ಹೇಳುತ್ತೇನೆ, ಓದಿಯೂ ಹೇಳುತ್ತೇನೆ. ಅಥವಾ English ನಲ್ಲಿ ಮಾತನಾಡಿ ಅಭ್ಯಾಸ ಮಾಡಿ.</span></div>
+    </div>
+    <div class="chatCtl">
+      <button class="bigMic" id="chatMic">🎤 ಒತ್ತಿ ಮಾತನಾಡಿ</button>
+    </div>
+    <footer>ಪ್ರೀತಿಯಿಂದ — <span class="avi">ಅವಿಜ್ಞಾನಿ</span></footer>
+  </section>
+
+  <!-- ಕ್ವಿಜ್ -->
+  <section class="view" id="v-quiz">
+    <div id="quizHome">
+      <p class="note" style="margin:2px 0 12px">ಪ್ರತಿ ಹಂತದಲ್ಲಿ 10 ಪ್ರಶ್ನೆಗಳು · 7 ಅಥವಾ ಹೆಚ್ಚು ಸರಿ ಉತ್ತರ ಕೊಟ್ಟರೆ ಮುಂದಿನ ಹಂತ ತೆರೆದುಕೊಳ್ಳುತ್ತದೆ ⭐</p>
+      <div id="lvlList"></div>
+    </div>
+    <div id="quizPlay" style="display:none">
+      <div class="qTop"><span id="qProg"></span><span id="qScore"></span></div>
+      <div class="qCard">
+        <div class="qTxt" id="qTxt"></div>
+        <button class="spkS" id="qSpeak" style="border:none;background:#EFE9FF;border-radius:999px;padding:6px 14px;font-size:14px;cursor:pointer;font-family:inherit">🔊 English ಕೇಳಿ</button>
+        <div id="qOpts"></div>
+        <div class="qExpl" id="qExpl" style="display:none"></div>
+        <button class="bigBtn" id="qNext" style="display:none;margin-top:12px">ಮುಂದಿನ ಪ್ರಶ್ನೆ ➡️</button>
+      </div>
+    </div>
+    <div id="quizDone" style="display:none" class="qCard">
+      <div class="qBig" id="qResult"></div>
+      <p id="qResultMsg" style="text-align:center;margin:8px 0 14px;line-height:1.55"></p>
+      <button class="bigBtn" id="qRetry">🔁 ಮತ್ತೆ ಆಡಿ</button>
+      <button class="miniBtn" id="qHome" style="width:100%;margin-top:8px">🏆 ಹಂತಗಳಿಗೆ ಹೋಗಿ</button>
+    </div>
+    <footer>ಪ್ರೀತಿಯಿಂದ — <span class="avi">ಅವಿಜ್ಞಾನಿ</span></footer>
+  </section>
+
+  <!-- ಕಿತಾಪತಿ ಮಾಡಿದವರು -->
+  <section class="view" id="v-about">
+    <div class="qCard" style="text-align:center">
+      <img src="icon-192.png" style="width:84px;height:84px;border-radius:20px" alt="">
+      <div class="qBig" style="margin-top:10px">ಇಂಗ್ಲಿಷ್ ಕಲಿ</div>
+      <p style="margin-top:8px;line-height:1.65">ಕನ್ನಡಿಗರಿಗಾಗಿ ಸುಲಭವಾಗಿ English ಕಲಿಯುವ ಆಪ್ — ಪಾಠಗಳು, ಅನುವಾದ, ಮಾತುಕತೆ ಮತ್ತು ಕ್ವಿಜ್. ಎಲ್ಲವೂ ಉಚಿತ.</p>
+    </div>
+    <div class="catTitle">ಕಿತಾಪತಿ ಮಾಡಿದವರು</div>
+    <div class="qCard" style="line-height:1.75">
+      <p>ಈ ಆಪ್ ರೂಪುಗೊಂಡದ್ದು <span class="avi">ಅವಿಜ್ಞಾನಿ</span> ಮತ್ತು <b>Muse AI</b> ಅವರ ಕೊಡುಗೆಯಿಂದ.</p>
+      <p style="margin-top:10px">🌿 <span class="avi">ಅವಿಜ್ಞಾನಿ</span> — ಕಲ್ಪನೆ, ಕೊಡುಗೆ, ಕನ್ನಡ, ಮಾರ್ಗದರ್ಶನ ಮತ್ತು ತಾಂತ್ರಿಕ ಸಹಾಯ<br>🤖 <b>Muse AI</b> — ತಾಂತ್ರಿಕ ನಿರ್ಮಾಣ</p>
+    </div>
+    <footer>ಪ್ರೀತಿಯಿಂದ — <span class="avi">ಅವಿಜ್ಞಾನಿ</span></footer>
+  </section>
+</main>
+
+<nav>
+  <button id="tab-learn" class="on"><span class="ic">📚</span>ಪಾಠಗಳು</button>
+  <button id="tab-trans"><span class="ic">🌐</span>ಅನುವಾದ</button>
+  <button id="tab-chat"><span class="ic">🎤</span>ಮಾತುಕತೆ</button>
+  <button id="tab-quiz"><span class="ic">🏆</span>ಕ್ವಿಜ್</button>
+</nav>
+
+<script>
+/* ================= ಧ್ವನಿ (ಓದಿ ಹೇಳುವುದು) ================= */
+let voiceCache = [];
+function loadVoices(){ try{ voiceCache = speechSynthesis.getVoices() || []; }catch(e){} }
+if ('speechSynthesis' in window){ loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+const BAD_VOICES = ['whisper','robot','alien','grandpa','grandma','bells','bubbles','cellos','hysterical','pipe organ','trinoids','zarvox','deranged','boing','bad news','good news','jester','superstar','wobble','albert','fred','junior','ralph','bahh','agnes','bruce','vicki','victoria','alex','daniel','fiona','karen','moira','tessa','veena','lekha','rishi'];
+function pickVoice(lang){
+  if (!voiceCache.length) loadVoices();
+  const want = lang.toLowerCase();               // e.g. en-in / kn-in
+  const base = want.split('-')[0];               // en / kn
+  const nativeName = base === 'kn' ? ['ಕನ್ನಡ','kannada'] : base === 'en' ? ['english'] : [];
+  let best = null, bestScore = -1;
+  voiceCache.forEach(v => {
+    const vl = (v.lang || '').replace('_','-').toLowerCase();
+    const nm = (v.name || '').toLowerCase();
+    if (BAD_VOICES.some(b => nm.includes(b))) return;
+    let s = 0;
+    if (vl === want) s += 50;
+    else if (vl.startsWith(base + '-')) s += 25;
+    else if (vl === base) s += 20;
+    else return;                                  // ಬೇರೆ ಭಾಷೆಯ voice ಬೇಡ
+    if (nm.includes('google')) s += 30;
+    if (nativeName.some(n => nm.includes(n))) s += 12;
+    if (base === 'en' && nm.includes('female')) s += 6;
+    if (v.default) s += 2;
+    if (s > bestScore){ bestScore = s; best = v; }
+  });
+  return best;
+}
+/* ಮಾತಿನ ಸರದಿ — ಭಾಗಗಳನ್ನು ಒಂದರ ನಂತರ ಒಂದು ಓದುತ್ತದೆ.
+   ಫೋನ್‌ನಲ್ಲಿ ಕನ್ನಡ voice ಇಲ್ಲದಿದ್ದರೆ Google ಕನ್ನಡ ಧ್ವನಿ (online) ಬಳಸುತ್ತದೆ. */
+let speakQ = [], curAudio = null, speakGen = 0;
+function stopSpeak(){
+  speakGen++;
+  try{ speechSynthesis.cancel(); }catch(e){}
+  if (curAudio){ try{ curAudio.pause(); }catch(e){} curAudio = null; }
+  speakQ = [];
+}
+function chunkText(t, n){
+  const parts = []; let s = t;
+  while (s.length > n){
+    let cut = -1;
+    for (const p of ['। ', '. ', '! ', '? ', ', ', ' ']){ const i = s.lastIndexOf(p, n); if (i > 40){ cut = i + p.length; break; } }
+    if (cut < 0) cut = n;
+    parts.push(s.slice(0, cut)); s = s.slice(cut);
+  }
+  if (s.trim()) parts.push(s);
+  return parts;
+}
+/* Online ಧ್ವನಿಗಾಗಿ ಒಂದೇ audio element — mic/button ಒತ್ತಿದಾಗಲೇ unlock ಮಾಡುತ್ತೇವೆ,
+   ಇಲ್ಲದಿದ್ದರೆ Chrome AI ಉತ್ತರದ ನಂತರ ಬರುವ online ಧ್ವನಿಯನ್ನು ತಡೆಯುತ್ತದೆ. */
+let ttsAudio = null;
+function getAudio(){ if (!ttsAudio) ttsAudio = new Audio(); return ttsAudio; }
+function primeAudio(){
+  try{
+    const a = getAudio();
+    a.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=';
+    const p = a.play(); if (p && p.catch) p.catch(() => {});
+  }catch(e){}
+}
+function playGoogleTTS(text, tl, gen, done){
+  const chunks = chunkText(text, 180); let i = 0;
+  const a = getAudio();
+  const next = () => {
+    if (gen !== speakGen) return;
+    if (i >= chunks.length){ done(); return; }
+    curAudio = a;
+    a.onended = next; a.onerror = next;
+    a.src = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=' + tl + '&client=tw-ob&q=' + encodeURIComponent(chunks[i++]);
+    const pr = a.play(); if (pr && pr.catch) pr.catch(next);
+  };
+  next();
+}
+/* AI ಧ್ವನಿ (Gemini) — ಮೊದಲು ಇದೇ; ಸಿಗದಿದ್ದರೆ ಮಾತ್ರ ಹಳೆಯ ಧ್ವನಿ (fallback) */
+async function fetchAiVoice(text, lang){
+  const ctl = new AbortController();
+  const to = setTimeout(() => ctl.abort(), 15000);
+  try{
+    const r = await fetch(API, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ kind:'voice', text, lang }), signal: ctl.signal });
+    if (!r.ok) throw new Error('voice failed');
+    const ct = r.headers.get('Content-Type') || '';
+    if (ct.indexOf('audio') === 0){
+      const blob = await r.blob();
+      return URL.createObjectURL(blob);
+    }
+    const j = await r.json().catch(() => null);
+    if (!j || !j.audio) throw new Error('voice failed');
+    return j.audio;
+  } finally { clearTimeout(to); }
+}
+function playDataUri(uri, gen, done){
+  const a = getAudio();
+  a.onended = () => { if (gen === speakGen) done(); };
+  a.onerror = () => { if (gen === speakGen) done(); };
+  a.src = uri;
+  const pr = a.play(); if (pr && pr.catch) pr.catch(() => { if (gen === speakGen) done(); });
+}
+function fallbackSpeak(text, lang, gen, done){
+  const base = lang.split('-')[0];
+  const v = pickVoice(lang);
+  if (!v && base === 'kn'){ playGoogleTTS(text, 'kn', gen, done); return; }
+  try{
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang; u.pitch = 1; u.rate = base === 'kn' ? 0.92 : 0.97;
+    if (v) u.voice = v;
+    u.onend = () => { if (gen === speakGen) done(); };
+    u.onerror = () => { if (gen === speakGen) done(); };
+    speechSynthesis.speak(u);
+  }catch(e){ done(); }
+}
+function playPart(p, gen, done){
+  const chunks = chunkText(p.text, 150);
+  if (chunks.length && chunks[0].length > 70){
+    // ಮೊದಲ ತುಣುಕು ಚಿಕ್ಕದಾಗಿದ್ದರೆ ಧ್ವನಿ ಬೇಗ ಶುರುವಾಗುತ್ತದೆ
+    let cut = chunks[0].lastIndexOf(' ', 70);
+    if (cut < 30) cut = 70;
+    chunks.splice(0, 1, chunks[0].slice(0, cut), chunks[0].slice(cut).trim());
+  }
+  let i = 0; const cache = {};
+  const prefetch = k => { if (k < chunks.length && !(k in cache)) cache[k] = fetchAiVoice(chunks[k], p.lang).catch(() => null); };
+  prefetch(0);
+  const step = async () => {
+    if (gen !== speakGen) return;
+    if (i >= chunks.length){ done(); return; }
+    const k = i++; prefetch(k + 1);
+    let data = null;
+    try{ data = await cache[k]; }catch(e){}
+    if (gen !== speakGen) return;
+    if (data) playDataUri(data, gen, step);
+    else fallbackSpeak(chunks[k], p.lang, gen, step);
+  };
+  step();
+}
+function playNextSpeak(gen){
+  if (gen !== speakGen) return;
+  const p = speakQ.shift();
+  if (!p) return;
+  playPart(p, gen, () => playNextSpeak(gen));
+}
+function speakParts(parts){
+  loadVoices();
+  stopSpeak();
+  speakQ = parts.filter(p => p && p.text && p.text.trim());
+  playNextSpeak(speakGen);
+}
+function speak(text, lang){ speakParts([{ text, lang }]); }
+
+/* ================= ಪಾಠಗಳು ================= */
+const LESSONS = [
+ { t:'ಶುಭಾಶಯಗಳು 🙏', items:[
+   ['Good morning','ಶುಭೋದಯ','ಗುಡ್ ಮಾರ್ನಿಂಗ್'],
+   ['Good afternoon','ಶುಭ ಮಧ್ಯಾಹ್ನ','ಗುಡ್ ಆಫ್ಟರ್‌ನೂನ್'],
+   ['Good evening','ಶುಭ ಸಂಜೆ','ಗುಡ್ ಈವನಿಂಗ್'],
+   ['Good night','ಶುಭ ರಾತ್ರಿ','ಗುಡ್ ನೈಟ್'],
+   ['Hello, how are you?','ಹಲೋ, ಹೇಗಿದ್ದೀರಿ?','ಹೆಲೋ, ಹೌ ಆರ್ ಯೂ?'],
+   ['I am fine, thank you','ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ, ಧನ್ಯವಾದಗಳು','ಐ ಆಮ್ ಫೈನ್, ಥ್ಯಾಂಕ್ ಯೂ'],
+   ['What is your name?','ನಿಮ್ಮ ಹೆಸರೇನು?','ವಾಟ್ ಈಸ್ ಯುವರ್ ನೇಮ್?'],
+   ['My name is Ravi','ನನ್ನ ಹೆಸರು ರವಿ','ಮೈ ನೇಮ್ ಈಸ್ ರವಿ'],
+   ['Nice to meet you','ನಿಮ್ಮನ್ನು ಭೇಟಿಯಾಗಿ ಸಂತೋಷವಾಯಿತು','ನೈಸ್ ಟು ಮೀಟ್ ಯೂ'],
+   ['See you tomorrow','ನಾಳೆ ಭೇಟಿಯಾಗೋಣ','ಸೀ ಯೂ ಟುಮಾರೋ']
+ ]},
+ { t:'ದೈನಂದಿನ ವಾಕ್ಯಗಳು 🏠', items:[
+   ['Please wait a moment','ದಯವಿಟ್ಟು ಸ್ವಲ್ಪ ಕಾಯಿರಿ','ಪ್ಲೀಸ್ ವೇಟ್ ಎ ಮೊಮೆಂಟ್'],
+   ['I don’t understand','ನನಗೆ ಅರ್ಥವಾಗಲಿಲ್ಲ','ಐ ಡೋಂಟ್ ಅಂಡರ್‌ಸ್ಟ್ಯಾಂಡ್'],
+   ['Please speak slowly','ದಯವಿಟ್ಟು ನಿಧಾನವಾಗಿ ಮಾತನಾಡಿ','ಪ್ಲೀಸ್ ಸ್ಪೀಕ್ ಸ್ಲೋಲಿ'],
+   ['Can you help me?','ನೀವು ನನಗೆ ಸಹಾಯ ಮಾಡುತ್ತೀರಾ?','ಕ್ಯಾನ್ ಯೂ ಹೆಲ್ಪ್ ಮೀ?'],
+   ['I am hungry','ನನಗೆ ಹಸಿವಾಗಿದೆ','ಐ ಆಮ್ ಹಂಗ್ರಿ'],
+   ['I am thirsty','ನನಗೆ ಬಾಯಾರಿಕೆಯಾಗಿದೆ','ಐ ಆಮ್ ಥರ್ಸ್ಟಿ'],
+   ['Where is the bathroom?','ಶೌಚಾಲಯ ಎಲ್ಲಿದೆ?','ವೇರ್ ಈಸ್ ದ ಬಾತ್‌ರೂಮ್?'],
+   ['I need water','ನನಗೆ ನೀರು ಬೇಕು','ಐ ನೀಡ್ ವಾಟರ್'],
+   ['Come here','ಇಲ್ಲಿ ಬನ್ನಿ','ಕಮ್ ಹಿಯರ್'],
+   ['Sit down, please','ದಯವಿಟ್ಟು ಕುಳಿತುಕೊಳ್ಳಿ','ಸಿಟ್ ಡೌನ್, ಪ್ಲೀಸ್']
+ ]},
+ { t:'ಕೃತಜ್ಞತೆ ಮತ್ತು ವಿನಯ 🌸', items:[
+   ['Thank you very much','ತುಂಬಾ ಧನ್ಯವಾದಗಳು','ಥ್ಯಾಂಕ್ ಯೂ ವೆರಿ ಮಚ್'],
+   ['You are welcome','ಸ್ವಾಗತ, ಪರವಾಗಿಲ್ಲ','ಯೂ ಆರ್ ವೆಲ್‌ಕಮ್'],
+   ['Excuse me','ಕ್ಷಮಿಸಿ, ಸ್ವಲ್ಪ','ಎಕ್ಸ್‌ಕ್ಯೂಸ್ ಮೀ'],
+   ['Please forgive me','ದಯವಿಟ್ಟು ನನ್ನನ್ನು ಕ್ಷಮಿಸಿ','ಪ್ಲೀಸ್ ಫರ್ಗಿವ್ ಮೀ'],
+   ['No problem','ಪರವಾಗಿಲ್ಲ','ನೋ ಪ್ರಾಬ್ಲೆಮ್'],
+   ['Congratulations!','ಅಭಿನಂದನೆಗಳು!','ಕಂಗ್ರಾಚುಲೇಷನ್ಸ್!'],
+   ['Good luck!','ಶುಭವಾಗಲಿ!','ಗುಡ್ ಲಕ್!'],
+   ['Take care','ಹುಷಾರಾಗಿರಿ','ಟೇಕ್ ಕೇರ್'],
+   ['Welcome to our home','ನಮ್ಮ ಮನೆಗೆ ಸುಸ್ವಾಗತ','ವೆಲ್‌ಕಮ್ ಟು ಅವರ್ ಹೋಮ್'],
+   ['Don’t worry','ಚಿಂತಿಸಬೇಡಿ','ಡೋಂಟ್ ವರಿ']
+ ]},
+ { t:'ಪ್ರಶ್ನೆ ಕೇಳುವುದು ❓', items:[
+   ['Where are you going?','ನೀವು ಎಲ್ಲಿಗೆ ಹೋಗುತ್ತಿದ್ದೀರಿ?','ವೇರ್ ಆರ್ ಯೂ ಗೋಯಿಂಗ್?'],
+   ['What are you doing?','ನೀವು ಏನು ಮಾಡುತ್ತಿದ್ದೀರಿ?','ವಾಟ್ ಆರ್ ಯೂ ಡೂಯಿಂಗ್?'],
+   ['When will you come?','ನೀವು ಯಾವಾಗ ಬರುತ್ತೀರಿ?','ವೆನ್ ವಿಲ್ ಯೂ ಕಮ್?'],
+   ['Why are you late?','ನೀವು ಏಕೆ ತಡವಾಗಿ ಬಂದಿರಿ?','ವೈ ಆರ್ ಯೂ ಲೇಟ್?'],
+   ['How much is this?','ಇದು ಎಷ್ಟು?','ಹೌ ಮಚ್ ಈಸ್ ದಿಸ್?'],
+   ['Do you speak Kannada?','ನೀವು ಕನ್ನಡ ಮಾತನಾಡುತ್ತೀರಾ?','ಡೂ ಯೂ ಸ್ಪೀಕ್ ಕನ್ನಡ?'],
+   ['Where do you live?','ನೀವು ಎಲ್ಲಿ ವಾಸಿಸುತ್ತೀರಿ?','ವೇರ್ ಡೂ ಯೂ ಲಿವ್?'],
+   ['Can I sit here?','ನಾನು ಇಲ್ಲಿ ಕುಳಿತುಕೊಳ್ಳಬಹುದೇ?','ಕ್ಯಾನ್ ಐ ಸಿಟ್ ಹಿಯರ್?']
+ ]},
+ { t:'ಸಂಖ್ಯೆಗಳು 🔢', items:[
+   ['One','ಒಂದು','ವನ್'],['Two','ಎರಡು','ಟೂ'],['Three','ಮೂರು','ಥ್ರೀ'],['Four','ನಾಲ್ಕು','ಫೋರ್'],
+   ['Five','ಐದು','ಫೈವ್'],['Six','ಆರು','ಸಿಕ್ಸ್'],['Seven','ಏಳು','ಸೆವೆನ್'],['Eight','ಎಂಟು','ಏಯ್ಟ್'],
+   ['Nine','ಒಂಬತ್ತು','ನೈನ್'],['Ten','ಹತ್ತು','ಟೆನ್'],['Eleven','ಹನ್ನೊಂದು','ಇಲೆವೆನ್'],['Twelve','ಹನ್ನೆರಡು','ಟ್ವೆಲ್ವ್'],
+   ['Twenty','ಇಪ್ಪತ್ತು','ಟ್ವೆಂಟಿ'],['Fifty','ಐವತ್ತು','ಫಿಫ್ಟಿ'],['Hundred','ನೂರು','ಹಂಡ್ರೆಡ್'],['Thousand','ಸಾವಿರ','ಥೌಸಂಡ್']
+ ]},
+ { t:'ದಿನಗಳು ಮತ್ತು ಸಮಯ 🗓️', items:[
+   ['Today','ಇಂದು','ಟುಡೇ'],['Tomorrow','ನಾಳೆ','ಟುಮಾರೋ'],['Yesterday','ನಿನ್ನೆ','ಯೆಸ್ಟರ್ಡೇ'],
+   ['Monday','ಸೋಮವಾರ','ಮಂಡೇ'],['Tuesday','ಮಂಗಳವಾರ','ಟ್ಯೂಸ್‌ಡೇ'],['Wednesday','ಬುಧವಾರ','ವೆಡ್ನೆಸ್‌ಡೇ'],
+   ['Thursday','ಗುರುವಾರ','ಥರ್ಸ್‌ಡೇ'],['Friday','ಶುಕ್ರವಾರ','ಫ್ರೈಡೇ'],['Saturday','ಶನಿವಾರ','ಸ್ಯಾಟರ್ಡೇ'],['Sunday','ಭಾನುವಾರ','ಸಂಡೇ'],
+   ['What time is it?','ಈಗ ಸಮಯ ಎಷ್ಟು?','ವಾಟ್ ಟೈಮ್ ಈಸ್ ಇಟ್?']
+ ]},
+ { t:'ಅಂಗಡಿ ಮತ್ತು ಪ್ರಯಾಣ 🚌', items:[
+   ['How much does it cost?','ಇದರ ಬೆಲೆ ಎಷ್ಟು?','ಹೌ ಮಚ್ ಡಸ್ ಇಟ್ ಕಾಸ್ಟ್?'],
+   ['It is too expensive','ಇದು ತುಂಬಾ ದುಬಾರಿ','ಇಟ್ ಈಸ್ ಟೂ ಎಕ್ಸ್‌ಪೆನ್ಸಿವ್'],
+   ['Please reduce the price','ದಯವಿಟ್ಟು ಬೆಲೆ ಕಡಿಮೆ ಮಾಡಿ','ಪ್ಲೀಸ್ ರೆಡ್ಯೂಸ್ ದ ಪ್ರೈಸ್'],
+   ['I want to buy this','ನಾನು ಇದನ್ನು ಕೊಳ್ಳಲು ಬಯಸುತ್ತೇನೆ','ಐ ವಾಂಟ್ ಟು ಬೈ ದಿಸ್'],
+   ['Stop here, please','ದಯವಿಟ್ಟು ಇಲ್ಲಿ ನಿಲ್ಲಿಸಿ','ಸ್ಟಾಪ್ ಹಿಯರ್, ಪ್ಲೀಸ್'],
+   ['Turn left','ಎಡಕ್ಕೆ ತಿರುಗಿ','ಟರ್ನ್ ಲೆಫ್ಟ್'],
+   ['Turn right','ಬಲಕ್ಕೆ ತಿರುಗಿ','ಟರ್ನ್ ರೈಟ್'],
+   ['I am lost','ನಾನು ದಾರಿ ತಪ್ಪಿದ್ದೇನೆ','ಐ ಆಮ್ ಲಾಸ್ಟ್']
+ ]}
+];
+const lessonsEl = document.getElementById('lessons');
+LESSONS.forEach(cat => {
+  const h = document.createElement('div'); h.className = 'catTitle'; h.textContent = cat.t; lessonsEl.appendChild(h);
+  cat.items.forEach(it => {
+    const d = document.createElement('div'); d.className = 'lesson';
+    const tx = document.createElement('div'); tx.className = 'txt';
+    const e = document.createElement('div'); e.className = 'en'; e.textContent = it[0];
+    const k = document.createElement('div'); k.className = 'kn'; k.textContent = it[1];
+    const p = document.createElement('div'); p.className = 'pr'; p.textContent = 'ಉಚ್ಚಾರಣೆ: ' + it[2];
+    tx.append(e, k, p);
+    const b = document.createElement('button'); b.className = 'spk'; b.textContent = '🔊';
+    b.onclick = () => speak(it[0], 'en-IN');
+    d.append(tx, b); lessonsEl.appendChild(d);
+  });
+});
+
+/* ================= AI ಎಂಜಿನ್ (KAIMDV proxy — key ಇಲ್ಲ) ================= */
+const API = 'https://kaimdv-api.vercel.app/api/gemini';
+async function aiText(prompt){
+  const r = await fetch(API, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ kind:'chat', prompt }) });
+  const j = await r.json().catch(() => null);
+  if (!r.ok || !j || !j.text) throw new Error((j && j.error) || ('HTTP ' + r.status));
+  return j.text.trim();
+}
+async function myMemory(text, from, to){
+  const u = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text.slice(0, 450)) + '&langpair=' + from + '|' + to;
+  const r = await fetch(u); const j = await r.json();
+  const t = j && j.responseData && j.responseData.translatedText;
+  if (!t) throw new Error('no result');
+  return t;
+}
+
+/* ================= ಧ್ವನಿ ಗುರುತಿಸುವಿಕೆ (ಮಾತು → ಅಕ್ಷರ) ================= */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+function listen(lang, btn, busyText, onText, onEnd){
+  if (!SR){ alert('ಈ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಧ್ವನಿ ಗುರುತಿಸುವಿಕೆ ಕೆಲಸ ಮಾಡುವುದಿಲ್ಲ. ದಯವಿಟ್ಟು Chrome ಬ್ರೌಸರ್ ಬಳಸಿ.'); return; }
+  primeAudio();
+  stopSpeak();
+  const rec = new SR();
+  rec.lang = lang; rec.interimResults = false; rec.maxAlternatives = 1;
+  const old = btn.textContent;
+  btn.classList.add('rec'); if (busyText) btn.textContent = busyText;
+  rec.onresult = e => { const t = e.results[0][0].transcript; if (t) onText(t); };
+  rec.onerror = () => {};
+  rec.onend = () => { btn.classList.remove('rec'); if (busyText) btn.textContent = old; if (onEnd) onEnd(); };
+  try{ rec.start(); }catch(e){ btn.classList.remove('rec'); }
+}
+
+/* ================= ಅನುವಾದ ================= */
+let dir = 'en-kn'; // en-kn ಅಥವಾ kn-en
+const trIn = document.getElementById('trIn'), trOut = document.getElementById('trOut'),
+      trGo = document.getElementById('trGo'), trNote = document.getElementById('trNote'),
+      dirEnKn = document.getElementById('dirEnKn'), dirKnEn = document.getElementById('dirKnEn');
+function setDir(d){
+  dir = d;
+  dirEnKn.classList.toggle('on', d === 'en-kn');
+  dirKnEn.classList.toggle('on', d === 'kn-en');
+  trIn.placeholder = d === 'en-kn' ? 'ಇಲ್ಲಿ English ಬರೆಯಿರಿ…' : 'ಇಲ್ಲಿ ಕನ್ನಡ ಬರೆಯಿರಿ…';
+}
+dirEnKn.onclick = () => setDir('en-kn');
+dirKnEn.onclick = () => setDir('kn-en');
+document.getElementById('trMic').onclick = e => {
+  listen(dir === 'en-kn' ? 'en-IN' : 'kn-IN', e.currentTarget, '🔴', t => { trIn.value = t; });
+};
+let lastTrans = '';
+trGo.onclick = async () => {
+  primeAudio();
+  const text = trIn.value.trim();
+  if (!text){ trOut.textContent = 'ಮೊದಲು ಏನಾದರೂ ಬರೆಯಿರಿ ಅಥವಾ ಮೈಕ್‌ನಲ್ಲಿ ಹೇಳಿ…'; return; }
+  trGo.disabled = true; trGo.textContent = 'ಅನುವಾದವಾಗುತ್ತಿದೆ…'; trNote.textContent = ''; trOut.textContent = '…';
+  const fromEn = dir === 'en-kn';
+  const prompt = fromEn
+    ? 'Translate the following English text into Kannada (ಕನ್ನಡ). Reply with ONLY the Kannada translation — no explanation, no English, no extra words.\n\nText: ' + text
+    : 'Translate the following Kannada text into English. Reply with ONLY the English translation — no explanation, no extra words.\n\nText: ' + text;
+  try{
+    lastTrans = await aiText(prompt);
+    trOut.textContent = lastTrans;
+  }catch(err){
+    try{
+      lastTrans = await myMemory(text, fromEn ? 'en' : 'kn', fromEn ? 'kn' : 'en');
+      trOut.textContent = lastTrans;
+      trNote.textContent = 'ಬ್ಯಾಕಪ್ ಅನುವಾದ ಎಂಜಿನ್ ಬಳಸಲಾಗಿದೆ';
+    }catch(e2){
+      trOut.textContent = 'ಅನುವಾದ ಸಿಗಲಿಲ್ಲ. ಇಂಟರ್ನೆಟ್ ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.';
+      lastTrans = '';
+    }
+  }
+  trGo.disabled = false; trGo.textContent = 'ಅನುವಾದಿಸಿ 🌐';
+};
+document.getElementById('trSpeak').onclick = () => { primeAudio(); if (lastTrans) speak(lastTrans, dir === 'en-kn' ? 'kn-IN' : 'en-IN'); };
+document.getElementById('trCopy').onclick = e => {
+  if (!lastTrans) return;
+  navigator.clipboard && navigator.clipboard.writeText(lastTrans).then(() => { e.target.textContent = '✅ ಕಾಪಿಯಾಯಿತು'; setTimeout(() => e.target.textContent = '📋 ಕಾಪಿ ಮಾಡಿ', 1500); });
+};
+
+/* ================= ಮಾತುಕತೆ (Voice Chat) ================= */
+let micLang = 'kn-IN';
+const chatBox = document.getElementById('chatBox'), chatMic = document.getElementById('chatMic');
+const micKn = document.getElementById('micKn'), micEn = document.getElementById('micEn');
+micKn.onclick = () => { micLang = 'kn-IN'; micKn.classList.add('on'); micEn.classList.remove('on'); };
+micEn.onclick = () => { micLang = 'en-IN'; micEn.classList.add('on'); micKn.classList.remove('on'); };
+const history = [];
+function addBub(cls, html){
+  const d = document.createElement('div'); d.className = 'bub ' + cls; d.innerHTML = html;
+  chatBox.appendChild(d); d.scrollIntoView({ behavior:'smooth', block:'end' }); return d;
+}
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+async function tutor(said){
+  const wait = addBub('ai', ' ಯೋಚಿಸುತ್ತಿದ್ದೇನೆ…');
+  const hist = history.slice(-4).map(h => (h.who === 'me' ? 'Learner: ' : 'Teacher: ') + h.text).join('\n');
+  const prompt =
+    'You are a kind, encouraging spoken-English teacher for a Kannada-speaking beginner. ' +
+    (micLang === 'kn-IN'
+      ? 'The learner spoke in Kannada. The EN line gives the natural English way to say what they said (plus a very short friendly English reply if it fits naturally). The KN line must be your FULL reply in Kannada, in natural spoken style as if talking aloud: answer what they said in Kannada, tell them the English sentence, and encourage them — friendly and complete, 1-3 sentences. '
+      : 'The learner is practising English. Reply briefly and friendly in simple English. If their English has a mistake, gently include the corrected sentence in the KN part. ') +
+    '\nReply in EXACTLY this format (two lines only):\nEN: <the English, max 2 short simple sentences>\nKN: <explanation in Kannada script — meaning, and correction if any>\n' +
+    (hist ? '\nRecent conversation:\n' + hist + '\n' : '') +
+    '\nLearner said: "' + said + '"';
+  try{
+    const ans = await aiText(prompt);
+    const enM = ans.match(/EN:\s*([\s\S]*?)(?=\nKN:|$)/i), knM = ans.match(/KN:\s*([\s\S]*?)(?=\nEN:|$)/i);
+    let en = enM ? enM[1].trim() : ans.trim(), kn = knM ? knM[1].trim() : '';
+    if (micLang === 'kn-IN' && !kn && en){
+      /* AI Kannada ಭಾಗ ಕೊಡದಿದ್ದರೆ, English ಉತ್ತರವನ್ನು ಕನ್ನಡಕ್ಕೆ ಅನುವಾದಿಸಿ */
+      try{ kn = await aiText('Translate the following English text into Kannada (ಕನ್ನಡ). Reply with ONLY the Kannada translation.\n\nText: ' + en); }catch(e){}
+    }
+    wait.innerHTML = '';
+    const s1 = document.createElement('span'); s1.className = 'enT'; s1.textContent = en; wait.appendChild(s1);
+    if (kn){ const s2 = document.createElement('span'); s2.className = 'knT'; s2.textContent = kn; wait.appendChild(s2); }
+    const sb = document.createElement('button'); sb.className = 'spkS'; sb.textContent = '🔊 English ಕೇಳಿ';
+    sb.onclick = () => speak(en, 'en-IN'); wait.appendChild(sb);
+    if (kn){ const kb = document.createElement('button'); kb.className = 'spkS'; kb.textContent = '🔊 ಕನ್ನಡ ಕೇಳಿ'; kb.style.marginLeft = '6px'; kb.onclick = () => speak(kn, 'kn-IN'); wait.appendChild(kb); }
+    history.push({ who:'ai', text: en });
+    if (micLang === 'kn-IN' && kn) speakParts([{ text: kn, lang: 'kn-IN' }, { text: en, lang: 'en-IN' }]);
+    else speak(en, 'en-IN');
+  }catch(err){
+    wait.innerHTML = '<span class="knT">ಕ್ಷಮಿಸಿ, ಈಗ ಉತ್ತರ ಸಿಗಲಿಲ್ಲ. ಇಂಟರ್ನೆಟ್ ಪರಿಶೀಲಿಸಿ ಮತ್ತೊಮ್ಮೆ ಹೇಳಿ.</span>';
+  }
+}
+chatMic.onclick = () => {
+  listen(micLang, chatMic, '🔴 ಕೇಳಿಸುತ್ತಿದೆ… ಮಾತನಾಡಿ', t => {
+    addBub('me', esc(t));
+    history.push({ who:'me', text: t });
+    tutor(t);
+  });
+};
+
+/* ================= ಟ್ಯಾಬ್‌ಗಳು ================= */
+const tabs = { learn: document.getElementById('v-learn'), trans: document.getElementById('v-trans'), chat: document.getElementById('v-chat'), quiz: document.getElementById('v-quiz'), about: document.getElementById('v-about') };
+const tabBtns = { learn: document.getElementById('tab-learn'), trans: document.getElementById('tab-trans'), chat: document.getElementById('tab-chat'), quiz: document.getElementById('tab-quiz') };
+function goTab(k){
+  Object.keys(tabs).forEach(x => { tabs[x].classList.toggle('on', x === k); if (tabBtns[x]) tabBtns[x].classList.toggle('on', x === k); });
+  document.querySelector('main').scrollTop = 0;
+}
+Object.keys(tabBtns).forEach(k => { tabBtns[k].onclick = () => goTab(k); });
+
+/* ================= ಕ್ವಿಜ್ ================= */
+const QUIZ_FIXED = {
+2: [
+ { q:"I ___ hungry.", o:["am","is","are","be"], a:0, e:"'I' ಜೊತೆ ಯಾವಾಗಲೂ 'am' ಬರುತ್ತದೆ — I am hungry." },
+ { q:"She ___ to school every day.", o:["go","goes","going","gone"], a:1, e:"She/He/It ಜೊತೆ ಕ್ರಿಯಾಪದಕ್ಕೆ 's' ಸೇರುತ್ತದೆ — goes." },
+ { q:"They ___ playing cricket.", o:["is","am","are","be"], a:2, e:"'They' (ಅವರು/ಅವು) ಜೊತೆ 'are' ಬರುತ್ತದೆ." },
+ { q:"He ___ a new bicycle.", o:["have","has","having","haves"], a:1, e:"He/She ಜೊತೆ 'has', I/You/We/They ಜೊತೆ 'have'." },
+ { q:"We ___ in Bengaluru.", o:["lives","live","living","lives in"], a:1, e:"'We' ಜೊತೆ ಕ್ರಿಯಾಪದದ ಮೂಲ ರೂಪ — live." },
+ { q:"The sun ___ in the east.", o:["rise","rises","rose","risen"], a:1, e:"ಸಾಮಾನ್ಯ ಸತ್ಯ ಹೇಳುವಾಗ ಸರಳ ವರ್ತಮಾನ — rises." },
+ { q:"___ you help me, please?", o:["Is","Does","Can","Am"], a:2, e:"ಸಹಾಯ ಕೇಳುವಾಗ 'Can you help me?' ಎನ್ನುತ್ತೇವೆ." },
+ { q:"This is ___ apple.", o:["a","an","the","some"], a:1, e:"ಸ್ವರ ಧ್ವನಿಯಿಂದ (a, e, i, o, u) ಶುರುವಾಗುವ ಪದದ ಮೊದಲು 'an' — an apple, an hour." },
+ { q:"I have ___ brothers.", o:["to","too","two","tow"], a:2, e:"ಸಂಖ್ಯೆ 2 = 'two'. 'to' = ಕಡೆಗೆ, 'too' = ಕೂಡ/ತುಂಬಾ." },
+ { q:"She is ___ than her sister.", o:["tall","taller","tallest","more tall"], a:1, e:"ಹೋಲಿಕೆ (than) ಇದ್ದಾಗ '-er' ರೂಪ — taller than." },
+ { q:"___ is your name?", o:["Where","Who","What","When"], a:2, e:"ಹೆಸರು ಕೇಳಲು 'What is your name?'" },
+ { q:"Birds ___ in the sky.", o:["flies","flys","fly","flown"], a:2, e:"'Birds' ಬಹುವಚನ — ಕ್ರಿಯಾಪದ ಮೂಲ ರೂಪ 'fly'." },
+ { q:"He ___ not like tea.", o:["do","does","is","are"], a:1, e:"He/She ಜೊತೆ 'does not' ಬರುತ್ತದೆ." },
+ { q:"Yesterday, I ___ a letter.", o:["write","writes","wrote","writing"], a:2, e:"'Yesterday' = ಕಳೆದ ಕಾಲ — write ನ ಭೂತಕಾಲ 'wrote'." }
+],
+3: [
+ { q:"We ___ to Mysuru last week.", o:["go","goes","went","gone"], a:2, e:"'Last week' = ಭೂತಕಾಲ — go ನ ಭೂತ ರೂಪ 'went'." },
+ { q:"If it rains, we ___ at home.", o:["stay","stays","stayed","will stay"], a:3, e:"'If' ಷರತ್ತಿನ ನಂತರ ಭವಿಷ್ಯ ಹೇಳುವಾಗ 'will' — will stay." },
+ { q:"He is good ___ English.", o:["in","at","on","for"], a:1, e:"'Good at' = ಯಾವುದರಲ್ಲಾದರೂ ಚೆನ್ನಾಗಿರುವುದು." },
+ { q:"What is the synonym of 'Happy'?", o:["Sad","Angry","Joyful","Tired"], a:2, e:"Happy = Joyful (ಸಂತೋಷ)." },
+ { q:"What is the opposite of 'Begin'?", o:["Start","End","Open","Continue"], a:1, e:"Begin (ಶುರು) ನ ವಿರುದ್ಧ = End (ಮುಗಿ)." },
+ { q:"Neither of the answers ___ correct.", o:["are","is","were","be"], a:1, e:"'Neither' ಏಕವಚನ — 'is' ಬರುತ್ತದೆ." },
+ { q:"I have been waiting here ___ two hours.", o:["since","from","for","at"], a:2, e:"ಅವಧಿಗೆ (ಎಷ್ಟು ಹೊತ್ತು) 'for' — for two hours. ಸಮಯದ ಬಿಂದುವಿಗೆ 'since'." },
+ { q:"She is the ___ girl in the class.", o:["tall","taller","tallest","most tall"], a:2, e:"'The' + ಎಲ್ಲರಲ್ಲೂ ಅತ್ಯಂತ ಎಂದಾಗ '-est' — the tallest." },
+ { q:"He asked me where I ___.", o:["live","lives","lived","living"], a:2, e:"ಹೇಳಿದ ಮಾತಿನಲ್ಲಿ (reported speech) ಭೂತಕಾಲ — lived." },
+ { q:"Choose the correct sentence:", o:["He don't like coffee.","He doesn't likes coffee.","He doesn't like coffee.","He not like coffee."], a:2, e:"He ಜೊತೆ 'doesn't' + ಕ್ರಿಯಾಪದದ ಮೂಲ ರೂಪ 'like'." },
+ { q:"___ Earth revolves around ___ Sun.", o:["A, a","The, the","An, the","No article, no article"], a:1, e:"ಒಂದೇ ಒಂದು ಇರುವ ವಸ್ತುಗಳಿಗೆ 'the' — the Earth, the Sun." },
+ { q:"The train ___ before we reached the station.", o:["leaves","has left","had left","leave"], a:2, e:"ಎರಡು ಭೂತ ಕ್ರಿಯೆಗಳಲ್ಲಿ ಮೊದಲು ಮುಗಿದದ್ದಕ್ಕೆ 'had' — had left." }
+],
+4: [
+ { q:"'Once in a blue moon' means:", o:["Every day","Very rarely","At night","Very often"], a:1, e:"ಈ ನುಡಿಗಟ್ಟು = ತುಂಬಾ ಅಪರೂಪಕ್ಕೆ, ಎಲ್ಲೋ ಒಮ್ಮೆ." },
+ { q:"'To break the ice' means:", o:["To break something cold","To start a conversation","To feel very cold","To end a friendship"], a:1, e:"ಮೌನ ಮುರಿದು ಮಾತು ಶುರು ಮಾಡುವುದು = break the ice." },
+ { q:"'He is a bookworm' means:", o:["He eats books","He sells books","He loves reading","He writes books"], a:2, e:"ಪುಸ್ತಕ ಓದುವುದರಲ್ಲಿ ತುಂಬಾ ಆಸಕ್ತಿ ಇರುವವ = bookworm." },
+ { q:"Choose the correct sentence:", o:["If I was rich, I will travel the world.","If I were rich, I would travel the world.","If I am rich, I would travelled the world.","If I were rich, I will travels the world."], a:1, e:"ಕಾಲ್ಪನಿಕ ಷರತ್ತಿಗೆ 'If I were...' + 'would' — ಸರಿಯಾದ ಜೋಡಿ ಎರಡನೆಯದು." },
+ { q:"Hardly had I sat down ___ the phone rang.", o:["than","then","when","that"], a:2, e:"'Hardly/Scarcely ... when' ಜೋಡಿ. 'No sooner ... than' ಎಂಬುದು ಬೇರೆ ಜೋಡಿ." },
+ { q:"What is the opposite of 'Generous'?", o:["Kind","Stingy","Honest","Brave"], a:1, e:"Generous (ಉದಾರ) ನ ವಿರುದ್ಧ = Stingy (ಜಿಪುಣ)." },
+ { q:"The committee ___ submitted its report.", o:["have","has","are","were"], a:1, e:"ಇಲ್ಲಿ committee ಒಂದೇ ತಂಡವಾಗಿ ('its') — ಏಕವಚನ 'has'." },
+ { q:"One of my friends ___ in Dubai.", o:["live","living","lives","are living"], a:2, e:"'One of...' ನಂತರ ಏಕವಚನ ಕ್ರಿಯಾಪದ — lives." },
+ { q:"By this time tomorrow, we ___ the exam.", o:["will finish","finish","finished","will have finished"], a:3, e:"ಭವಿಷ್ಯದಲ್ಲಿ ಮುಗಿದಿರುವ ಕ್ರಿಯೆ = will have finished." },
+ { q:"He speaks English ___.", o:["fluent","fluently","fluents","more fluent"], a:1, e:"ಕ್ರಿಯಾಪದವನ್ನು ವರ್ಣಿಸಲು ಕ್ರಿಯಾವಿಶೇಷಣ ಬೇಕು — fluently." },
+ { q:"'A blessing in disguise' means:", o:["A curse","A hidden good thing","A birthday gift","A big surprise party"], a:1, e:"ಮೊದಲು ಕೆಟ್ಟದ್ದು ಎನಿಸಿದರೂ ಒಳಗೆ ಒಳ್ಳೆಯದಿರುವುದು." },
+ { q:"Neither the teacher nor the students ___ present yesterday.", o:["was","were","is","be"], a:1, e:"'Neither...nor' ನಲ್ಲಿ ಹತ್ತಿರದ ಕರ್ತೃಕ್ಕೆ (students, ಬಹುವಚನ) ಹೊಂದುವ ಕ್ರಿಯಾಪದ — were." }
+]};
+const LVL_META = [
+ { n:1, t:"ಹಂತ 1 · ಸುಲಭ", d:"ದೈನಂದಿನ ವಾಕ್ಯಗಳ ಅರ್ಥ ಗುರುತಿಸಿ" },
+ { n:2, t:"ಹಂತ 2 · ಮಧ್ಯಮ", d:"ಸರಳ ವ್ಯಾಕರಣ ತುಂಬಿಸಿ" },
+ { n:3, t:"ಹಂತ 3 · ಕಷ್ಟ", d:"ವ್ಯಾಕರಣ + ಶಬ್ದಭಂಡಾರ" },
+ { n:4, t:"ಹಂತ 4 · ತಜ್ಞ", d:"ನುಡಿಗಟ್ಟುಗಳು + ಕಠಿಣ ವ್ಯಾಕರಣ" }
+];
+function shuffle(arr){ const a = arr.slice(); for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+let quizProg = { passed:{}, best:{} };
+try{ const s = localStorage.getItem('ek_quiz'); if (s) quizProg = JSON.parse(s); }catch(e){}
+function saveQuizProg(){ try{ localStorage.setItem('ek_quiz', JSON.stringify(quizProg)); }catch(e){} }
+const lvlList = document.getElementById('lvlList');
+function renderLvls(){
+  lvlList.innerHTML = '';
+  LVL_META.forEach(m => {
+    const unlocked = m.n === 1 || !!quizProg.passed[m.n - 1];
+    const passed = !!quizProg.passed[m.n];
+    const card = document.createElement('div'); card.className = 'lvlCard' + (unlocked ? '' : ' lock');
+    const lt = document.createElement('div'); lt.className = 'lt';
+    const b = document.createElement('b'); b.textContent = m.t;
+    const sp = document.createElement('span');
+    sp.textContent = m.d + (quizProg.best[m.n] ? ' · ಅತ್ಯುತ್ತಮ ಅಂಕ: ' + quizProg.best[m.n] + '/10' : '');
+    lt.append(b, sp);
+    const st = document.createElement('div'); st.className = 'st'; st.textContent = passed ? '⭐' : (unlocked ? '▶️' : '🔒');
+    card.append(lt, st);
+    if (unlocked) card.onclick = () => startQuiz(m.n);
+    lvlList.appendChild(card);
+  });
+}
+function genLevel1(){
+  const flat = [];
+  LESSONS.forEach(c => c.items.forEach(it => flat.push(it)));
+  const picks = shuffle(flat).slice(0, 10);
+  return picks.map((it, i) => {
+    const others = shuffle(flat.filter(x => x !== it));
+    if (i % 2 === 0){
+      return { q: it[0], knq:false, speak: it[0], o: shuffle([it[1]].concat(others.slice(0, 3).map(x => x[1]))), aText: it[1], e: 'ಉಚ್ಚಾರಣೆ: ' + it[2] };
+    }
+    return { q: it[1], knq:true, speak: null, o: shuffle([it[0]].concat(others.slice(0, 3).map(x => x[0]))), aText: it[0], e: 'ಅರ್ಥ: ' + it[1] + ' · ಉಚ್ಚಾರಣೆ: ' + it[2] };
+  });
+}
+let quiz = null;
+const quizHome = document.getElementById('quizHome'), quizPlay = document.getElementById('quizPlay'), quizDone = document.getElementById('quizDone');
+const qTxt = document.getElementById('qTxt'), qOpts = document.getElementById('qOpts'), qExpl = document.getElementById('qExpl'),
+      qNext = document.getElementById('qNext'), qProgEl = document.getElementById('qProg'), qScoreEl = document.getElementById('qScore'),
+      qSpeakBtn = document.getElementById('qSpeak');
+function startQuiz(lvl){
+  let qs;
+  if (lvl === 1) qs = genLevel1();
+  else qs = shuffle(QUIZ_FIXED[lvl]).slice(0, 10).map(it => ({ q: it.q, knq:false, speak: it.q.replace(/_+/g, ' blank '), o: shuffle(it.o.map((t, ix) => ({ t, ok: ix === it.a }))), e: it.e, fixed:true }));
+  if (lvl === 1) qs = qs.map(it => { const o = it.o.map(t => ({ t, ok: t === it.aText })); return { q: it.q, knq: it.knq, speak: it.speak, o, e: it.e }; });
+  quiz = { lvl, qs, i: 0, score: 0 };
+  quizHome.style.display = 'none'; quizDone.style.display = 'none'; quizPlay.style.display = 'block';
+  showQ();
+}
+function showQ(){
+  const it = quiz.qs[quiz.i];
+  qProgEl.textContent = 'ಪ್ರಶ್ನೆ ' + (quiz.i + 1) + ' / ' + quiz.qs.length;
+  qScoreEl.textContent = 'ಅಂಕ: ' + quiz.score;
+  qTxt.textContent = it.q;
+  qTxt.classList.toggle('knq', !!it.knq);
+  qSpeakBtn.style.display = it.speak ? 'inline-block' : 'none';
+  qSpeakBtn.onclick = () => { if (it.speak) speak(it.speak, 'en-IN'); };
+  qExpl.style.display = 'none'; qNext.style.display = 'none';
+  qOpts.innerHTML = '';
+  it.o.forEach(op => {
+    const b = document.createElement('button'); b.className = 'optBtn'; b.textContent = op.t;
+    b.onclick = () => pickOpt(b, op.ok);
+    qOpts.appendChild(b);
+  });
+}
+function pickOpt(btn, ok){
+  const it = quiz.qs[quiz.i];
+  Array.prototype.forEach.call(qOpts.children, (b, ix) => { b.disabled = true; if (it.o[ix].ok) b.classList.add('right'); });
+  if (ok){ quiz.score++; }
+  else btn.classList.add('wrong');
+  qScoreEl.textContent = 'ಅಂಕ: ' + quiz.score;
+  qExpl.textContent = (ok ? '✅ ಸರಿ! ' : '❌ ತಪ್ಪು. ') + it.e;
+  qExpl.style.display = 'block';
+  qNext.textContent = quiz.i === quiz.qs.length - 1 ? 'ಫಲಿತಾಂಶ ನೋಡಿ 🏁' : 'ಮುಂದಿನ ಪ್ರಶ್ನೆ ➡️';
+  qNext.style.display = 'block';
+}
+qNext.onclick = () => {
+  quiz.i++;
+  if (quiz.i < quiz.qs.length) showQ(); else finishQuiz();
+};
+function finishQuiz(){
+  quizPlay.style.display = 'none'; quizDone.style.display = 'block';
+  const s = quiz.score, total = quiz.qs.length, pass = s >= 7;
+  if (pass) quizProg.passed[quiz.lvl] = true;
+  if (!quizProg.best[quiz.lvl] || s > quizProg.best[quiz.lvl]) quizProg.best[quiz.lvl] = s;
+  saveQuizProg(); renderLvls();
+  document.getElementById('qResult').textContent = pass ? '🎉 ' + s + ' / ' + total : '💪 ' + s + ' / ' + total;
+  document.getElementById('qResultMsg').textContent = pass
+    ? (quiz.lvl < 4 ? 'ಅದ್ಭುತ! ಹಂತ ' + quiz.lvl + ' ಪಾಸ್ ಆಗಿದ್ದೀರಿ — ಮುಂದಿನ ಹಂತ ತೆರೆದುಕೊಂಡಿದೆ ⭐' : 'ಅದ್ಭುತ! ನೀವು ಕೊನೆಯ ಹಂತವನ್ನೂ ಪಾಸ್ ಮಾಡಿದ್ದೀರಿ — ನೀವು English ತಜ್ಞರು! 🏆')
+    : 'ಪಾಸ್ ಆಗಲು 7 ಅಂಕ ಬೇಕು. ಪಾಠಗಳನ್ನು ಮತ್ತೊಮ್ಮೆ ನೋಡಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ — ಖಂಡಿತ ಆಗುತ್ತದೆ!';
+}
+document.getElementById('qRetry').onclick = () => startQuiz(quiz.lvl);
+document.getElementById('qHome').onclick = () => { quizDone.style.display = 'none'; quizHome.style.display = 'block'; };
+renderLvls();
+
+/* ================= ಬಣ್ಣ (ಬಳಕೆದಾರರ ಆಯ್ಕೆ) ================= */
+function setTheme(name){
+  document.body.setAttribute('data-theme', name);
+  try{ localStorage.setItem('ek_theme', name); }catch(e){}
+  document.querySelectorAll('[data-theme-set]').forEach(d => d.classList.toggle('on', d.getAttribute('data-theme-set') === name));
+}
+document.querySelectorAll('[data-theme-set]').forEach(d => { d.onclick = e => { e.stopPropagation(); setTheme(d.getAttribute('data-theme-set')); }; });
+try{ setTheme(localStorage.getItem('ek_theme') || 'violet'); }catch(e){ setTheme('violet'); }
+
+/* ================= ⋮ ಮೆನು ================= */
+const menuPanel = document.getElementById('menuPanel'), menuBtn = document.getElementById('menuBtn');
+menuBtn.onclick = e => { e.stopPropagation(); menuPanel.style.display = menuPanel.style.display === 'none' ? 'block' : 'none'; };
+document.addEventListener('click', e => { if (menuPanel.style.display !== 'none' && !menuPanel.contains(e.target)) menuPanel.style.display = 'none'; });
+menuPanel.querySelectorAll('[data-go]').forEach(b => { b.onclick = () => { menuPanel.style.display = 'none'; goTab(b.getAttribute('data-go')); }; });
+
+/* ================= ತೆರೆಯುವ ಸ್ವಾಗತ + ಮೊದಲ ಬಾರಿಯ ಪ್ರಶ್ನೆ ================= */
+const splashEl = document.getElementById('splash');
+function closeSplash(){ primeAudio(); splashEl.classList.add('hide'); }
+let welcomed = null;
+try{ welcomed = localStorage.getItem('ek_welcomed'); }catch(e){}
+if (!welcomed){
+  document.getElementById('splashFirst').style.display = 'block';
+  document.getElementById('splashGo').style.display = 'none';
+  document.querySelectorAll('[data-ans]').forEach(b => {
+    b.onclick = () => {
+      const idx = +(b.getAttribute('data-ans') || 0);
+      try{ localStorage.setItem('ek_welcomed', '1'); }catch(e){}
+      if (idx >= 1) quizProg.passed[1] = true;
+      if (idx >= 2) quizProg.passed[2] = true;
+      if (idx >= 1){ saveQuizProg(); renderLvls(); }
+      closeSplash();
+      goTab(idx === 0 ? 'learn' : (idx === 1 ? 'quiz' : 'chat'));
+    };
+  });
+}
+document.getElementById('splashGo').onclick = closeSplash;
+
+/* ================= ಆಪ್ ಆಗಿ ಇನ್‌ಸ್ಟಾಲ್ (PWA) ================= */
+if ('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').catch(() => {}); }
+</script>
+</body>
+</html>
